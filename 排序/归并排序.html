@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>归并排序</title>
+</head>
+
+<body>
+	<script>
+		// 归并排序的原理：将数组细分为两个组，然后采用三个指针的方法，来将数组两两排序
+		// [l,r]
+		// 当这个数组近乎有序的时候，就可以不用进行两个遍历
+		function mergeSort(arr, l, r) {
+			if (l >= r) return
+			let mid = Math.floor((l + r) / 2)
+			mergeSort(arr, l, mid)
+			mergeSort(arr, mid + 1, r)
+			// 就说明这是一个几乎有序的数组
+			if (arr[mid] < arr[mid + 1]) {
+				return arr
+			}
+			return mergeArr(arr, l, mid, r)
+
+		}
+		function mergeArr(arr, l, mid, r) {
+			let left = l
+			let right = mid + 1
+			let newP = l
+			let newArr = [...arr] // 这个值不能作为，最终结果，因为它每次循环都会被赋值为arr,如果arr不变化，它始终不会变化
+			while (newP <= r) {
+				if (left > mid) {
+					arr[newP] = newArr[right]
+					right++
+					newP++
+				} else if (right > r) {
+					arr[newP] = newArr[left]
+					left++
+					newP++
+				} else if (newArr[left] < newArr[right]) {
+					arr[newP] = newArr[left]
+					newP++
+					left++
+				} else {
+					arr[newP] = newArr[right]
+					right++
+					newP++
+				}
+			}
+			return arr
+		}
+		console.log(mergeSort([1, 4, 5, 2, 8, 3, 9], 0, 6))
+	</script>
+</body>
+
+</html>

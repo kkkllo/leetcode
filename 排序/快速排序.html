@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>快速排序</title>
+</head>
+
+<body>
+	<Script>
+		// 快速排序的原理：分而治之，找一个中间值，将比这个中间值小的值放到左边，比中间值大的放在右边
+		// 最开始这种从数组的一遍遍历到另一边的方式，效率会比较低，如果情况不好，可能做的交换的次数比较多
+		// 优化的方法，就是从数组两边开始，找到不符合的就交换位置
+		// 当数组中重复出现多个数字，采用三路快排来提高效率
+		function quickSort(arr, l, r) {
+			if (l >= r) return
+			let mid = quickArr(arr, l, r)
+			quickSort(arr, l, mid - 1)
+			quickSort(arr, mid + 1, r)
+			return arr
+		}
+		// // 普通的从一头开始遍历
+		// function quickArr(arr, l, r) {
+		// 	let mid = arr[l]
+		// 	let leftP = l + 1
+		// 	let rightP = r
+		// 	for (let i = l + 1; i <= rightP;) {
+		// 		if (arr[i] > mid) {
+		// 			let temp = arr[rightP]
+		// 			arr[rightP] = arr[i]
+		// 			arr[i] = temp
+		// 			rightP--
+		// 		} else {
+		// 			i++
+		// 		}
+		// 	}
+		// 	let temp = arr[rightP]
+		// 	arr[rightP] = arr[l]
+		// 	arr[l] = temp
+		// 	return rightP
+		// }
+		// 
+
+		// 优化后的一般快排
+		// function quickArr(arr, l, r) {
+		// 	let mid = arr[l]
+		// 	let left = l + 1
+		// 	let right = r
+		// 	while (left < right) {
+		// 		while (arr[left] < mid) {
+		// 			left++
+		// 		}
+		// 		while (arr[right] > mid) {
+		// 			right--
+		// 		}
+		// 		if (left < right) {
+		// 			let temp = arr[left]
+		// 			arr[left] = arr[right]
+		// 			arr[right] = temp
+		// 			// left和right都要移动，不然会死循环
+		// 			left++
+		// 			right--
+		// 		} else {
+		// 			break
+		// 		}
+		// 	}
+		// 	let temp = arr[l]
+		// 	arr[l] = arr[right]
+		// 	arr[right] = temp
+		// 	return right
+		// }
+
+		// 三路快排
+		// [l + 1, lt]
+		// [lt + 1, i)
+		// [gt, r]
+		function quickArr(arr, l, r) {
+			let mid = arr[l]
+			let lt = l + 1
+			let gt = r
+
+			for (let i = lt; i <= gt;) {
+				if (arr[i] > mid) {
+					let temp = arr[i]
+					arr[i] = arr[gt]
+					arr[gt] = temp
+					gt--
+				} else if (arr[i] < mid) {
+					let temp = arr[i]
+					arr[i] = arr[lt]
+					arr[lt] = temp
+					lt++
+					i++
+				} else {
+					i++
+				}
+			}
+			let temp = arr[lt - 1]
+			arr[lt - 1] = arr[l]
+			arr[l] = temp
+			return lt - 1
+		}
+		console.log(quickSort([1, 9, 5, 2, 7, 4, 6], 0, 6))
+	</Script>
+</body>
+
+</html>
