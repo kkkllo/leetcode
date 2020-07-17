@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>堆排序的实现</title>
+</head>
+
+<body>
+	<script>
+		// 此时的堆的下标是从数组的索引0开始的
+		// 将一个数放入堆中
+		function insert(arr, item) {
+			let length = arr.length
+			arr[length] = item
+			let curr = length
+			while (curr > 0) {
+				let fath = Math.floor((curr - 1) / 2)
+				if (arr[curr] > arr[fath]) {
+					let temp = arr[fath]
+					arr[fath] = arr[curr]
+					arr[curr] = temp
+					curr = fath
+				} else {
+					break
+				}
+			}
+		}
+
+		// 获取堆中的最大元素
+		function getMaxElement(arr) {
+			let maxEl = arr[0]
+			let length = arr.length
+			arr[0] = arr[length - 1]
+			arr.pop()
+			shifDown(arr, 0)
+			return maxEl
+		}
+		// 从堆中将最大的元素取出来，然后使堆依然符合最大堆的特性
+		// 步骤1：将最后一个节点的元素放到第一个元素的位置
+		// 步骤2：看是否有左右子节点，如果有，就和左右子节点中较大的那个做交换
+		// 步骤3：交换了之后还要继续看是否有子节点，如果有就继续比较
+		function shifDown(arr, currIndex) {
+			let length = arr.length
+			while (2 * currIndex + 1 < length) {
+				let leftSon = 2 * currIndex + 1
+				if (leftSon + 1 < length && arr[leftSon] < arr[leftSon + 1]) {
+					leftSon++
+				}
+				if (arr[leftSon] < arr[currIndex]) {
+					break
+				}
+				let temp = arr[leftSon]
+				arr[leftSon] = arr[currIndex]
+				arr[currIndex] = temp
+				currIndex = leftSon
+			}
+		}
+
+		function heapSort1(arr) {
+			let length = arr.length
+			let newArr = []
+			// 将传入的数组构建成一个堆
+			for (let i = 0; i < length; i++) {
+				insert(newArr, arr[i])
+			}
+			console.log(newArr)
+			for (let i = length - 1; i >= 0; i--) {
+				let item = getMaxElement(newArr)
+				arr[i] = item
+			}
+			return arr
+		}
+		// 调用这个方法，将数组构建成堆
+		function heapify(arr) {
+			let length = arr.length
+			for (let i = Math.floor((length - 1) / 2); i >= 0; i--) {
+				shifDown(arr, i)
+			}
+		}
+		// 堆排序2和堆排序1的不同，是在构建堆的过程中的不同
+		// 排序2的排序方法是从第一个不是叶子节点的节点，开始向前遍历
+		// 第一种建堆的复杂度是O(nlogn)
+		// 第二种建堆的复杂度是O(n)
+		function heapSort2(arr) {
+			let newArr = []
+			let length = arr.length
+			heapify(arr)
+			for (let i = length - 1; i >= 0; i--) {
+				let item = getMaxElement(arr)
+				newArr[i] = item
+			}
+			return newArr
+		}
+
+		
+
+		// console.log(heapSort1([1, 5, 2, 8, 3, 9, 4]))
+		// console.log(heapSort2([1, 5, 2, 8, 3, 9, 4]))
+	</script>
+</body>
+
+</html>
